@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+    html,body {
+        margin: 0;
+        padding: 0;
+    }
+    .slider {
+        width: 1024px;
+        margin: 2em auto;
+        
+    }
+    
+    .slider-wrapper {
+        width: 100%;
+        height: 400px;
+        position: relative;
+    }
+    
+    .slide {
+        float: left;
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 3s linear;
+    }
+    
+    .slider-wrapper > .slide:first-child {
+        opacity: 1;
+    }
+    
+}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+  <script>
+    (function() {
+	
+	function Slideshow( element ) {
+		this.el = document.querySelector( element );
+		this.init();
+	}
+	
+	Slideshow.prototype = {
+		init: function() {
+			this.wrapper = this.el.querySelector( ".slider-wrapper" );
+			this.slides = this.el.querySelectorAll( ".slide" );
+			this.previous = this.el.querySelector( ".slider-previous" );
+			this.next = this.el.querySelector( ".slider-next" );
+			this.index = 0;
+			this.total = this.slides.length;
+			this.timer = null;
+			
+			this.action();
+			this.stopStart();	
+		},
+		_slideTo: function( slide ) {
+			var currentSlide = this.slides[slide];
+			currentSlide.style.opacity = 1;
+			
+			for( var i = 0; i < this.slides.length; i++ ) {
+				var slide = this.slides[i];
+				if( slide !== currentSlide ) {
+					slide.style.opacity = 0;
+				}
+			}
+		},
+		action: function() {
+			var self = this;
+			self.timer = setInterval(function() {
+				self.index++;
+				if( self.index == self.slides.length ) {
+					self.index = 0;
+				}
+				self._slideTo( self.index );
+				
+			}, 3000);
+		},
+		stopStart: function() {
+			var self = this;
+			self.el.addEventListener( "mouseover", function() {
+				clearInterval( self.timer );
+				self.timer = null;
+				
+			}, false);
+			self.el.addEventListener( "mouseout", function() {
+				self.action();
+				
+			}, false);
+		}
+		
+		
+	};
+	
+	document.addEventListener( "DOMContentLoaded", function() {
+		
+		var slider = new Slideshow( "#main-slider" );
+		
+	});
+	
+	
+})();
+</script>
+</head>
+
+<body>
+    <div class="slider" id="main-slider"><!-- outermost container element -->
+        <div class="slider-wrapper"><!-- innermost wrapper element -->
+            <img src="https://i.ibb.co/DzY4gXz/6e8e1ffc-6425-4d8f-9b54-b410462e5e48.jpg"  width="25" height="25" alt="First" class="slide" /><!-- slides -->
+            <img src="https://i.ibb.co/Lzc25Xy/b2c0b2ec-d408-4b3a-9eed-ba2676753e8a.jpg"  width="100%" height="500" alt="Second" class="slide" />
+            <img src="https://i.ibb.co/cJ408Dz/cc62b039-2d7e-4002-9962-7369902f8e02.jpg"  width="100%" height="500" alt="Third" class="slide" />
+            <img src="https://i.ibb.co/Bg884fP/ef343c7a-4e7f-4623-8c39-c48c2acb50b9.jpg"  width="100%" height="500" alt="Third" class="slide" />
+        </div>
+    </div>	
+
+</body>
+</html>
